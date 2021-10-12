@@ -37,11 +37,15 @@ class MyHomePage extends StatelessWidget {
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.transparent,
-          // leading: const IconButton(
-          //   icon: Icon(Icons.menu),
-          //   tooltip: 'Navigation menu',
-          //   onPressed: null,
-          // ),
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
+                icon: Icon(Icons.menu),
+                tooltip: 'Navigation menu',
+                onPressed: Scaffold.of(context).openDrawer,
+              );
+            }
+          ),
           title: Text(title),
           centerTitle: true,
           actions: const <Widget>[
