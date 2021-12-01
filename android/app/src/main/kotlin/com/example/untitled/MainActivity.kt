@@ -1,4 +1,4 @@
-package com.FunTust.weather
+package com.example.untitled
 
 import io.flutter.embedding.android.FlutterActivity
 
