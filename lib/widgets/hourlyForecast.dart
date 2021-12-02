@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../helper/utils.dart';
@@ -18,7 +19,7 @@ class HourlyForecast extends StatelessWidget {
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
+        color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
@@ -41,7 +42,7 @@ class HourlyForecast extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.black,
+                    color: !Get.isDarkMode ? Colors.black : Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -57,7 +58,7 @@ class HourlyForecast extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black,
+                      color: !Get.isDarkMode ? Colors.black : Colors.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

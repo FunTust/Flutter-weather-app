@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -16,7 +17,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
       child: Container(
-        color: Color(0xFFE2EBFF),
+        color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
         child: Column(
           children: [
             Row(
@@ -27,14 +28,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     },
                     icon: Icon(Icons.arrow_back_ios_outlined),
                     iconSize: 20,
-                    color: Colors.black),
+                    color: !Get.isDarkMode ? Colors.black : Colors.white),
                 SizedBox(
                   width: 18,
                 ),
                 Text('Избранные',
                     style: GoogleFonts.manrope(
                         fontSize: 20,
-                        color: Colors.black,
+                        color: !Get.isDarkMode ? Colors.black : Colors.white,
                         fontWeight: FontWeight.w600)),
               ],
             ),

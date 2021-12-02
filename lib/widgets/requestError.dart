@@ -11,7 +11,7 @@ class RequestError extends StatelessWidget {
           Icon(
             Icons.wrong_location_outlined,
             color: Colors.black,
-            size: 100,
+            size: 40,
           ),
           SizedBox(height: 10),
           Text(

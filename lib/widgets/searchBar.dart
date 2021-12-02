@@ -20,7 +20,7 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(child: Container(
       margin: EdgeInsets.symmetric(
         vertical: 25,
         horizontal: MediaQuery.of(context).size.width * .05,
@@ -60,7 +60,7 @@ class _SearchBarState extends State<SearchBar> {
             top: 11,
             right: 15,
           ),
-          hintText: "Search Location",
+          hintText: "Введите название города",
         ),
         onSubmitted: (value) {
           setState(() {
@@ -71,6 +71,7 @@ class _SearchBarState extends State<SearchBar> {
           });
         },
       ),
+    ),
     );
   }
 }

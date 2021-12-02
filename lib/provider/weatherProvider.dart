@@ -28,9 +28,9 @@ class WeatherProvider with ChangeNotifier {
         var latitude = locData.latitude;
         var longitude = locData.longitude;
         Uri url = Uri.parse(
-            'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&units=metric&appid=$apiKey');
+            'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&units=metric&lang=ru&appid=$apiKey');
         Uri dailyUrl = Uri.parse(
-            'https://api.openweathermap.org/data/2.5/onecall?lat=$latitude&lon=$longitude&units=metric&exclude=minutely,current&appid=$apiKey');
+            'https://api.openweathermap.org/data/2.5/onecall?lat=$latitude&lon=$longitude&units=metric&exclude=minutely,current&lang=ru&appid=$apiKey');
         try {
           final response = await http.get(url);
           final extractedData =
@@ -92,7 +92,7 @@ class WeatherProvider with ChangeNotifier {
     isRequestError = false;
     isLocationError = false;
     Uri url = Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&appid=$apiKey');
+        'https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&lang=ru&appid=$apiKey');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -103,12 +103,11 @@ class WeatherProvider with ChangeNotifier {
       notifyListeners();
       throw error;
     }
-    var latitude = weather.lat;
     var longitude = weather.long;
-    print(latitude);
+    print(weather.lat);
     print(longitude);
     Uri dailyUrl = Uri.parse(
-        'https://api.openweathermap.org/data/2.5/onecall?lat=$latitude&lon=$longitude&units=metric&exclude=minutely,current&appid=$apiKey');
+        'https://api.openweathermap.org/data/2.5/onecall?lat=${weather.lat}&lon=$longitude&units=metric&exclude=minutely,current&lang=ru&appid=$apiKey');
     try {
       final response = await http.get(dailyUrl);
       final dailyData = json.decode(response.body) as Map<String, dynamic>;
@@ -123,7 +122,7 @@ class WeatherProvider with ChangeNotifier {
           .map((item) => DailyWeather.fromHourlyJson(item))
           .toList()
           .skip(1)
-          .take(3)
+          .take(4)
           .toList();
       temp24Hour = itemsHourly
           .map((item) => DailyWeather.fromHourlyJson(item))

@@ -1,33 +1,66 @@
+import 'package:flutter_nord_theme/flutter_nord_theme.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/Screens/homeScreen.dart';
 
 import '../main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key, required this.title}) : super(key: key);
+  SettingsPage({Key? key, required this.title}) : super(key: key);
   final String title;
-
-  static int selected1 = 0;
-  static int selected2 = 0;
-  static int selected3 = 0;
-  static int selected4 = 0;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  int selected1 = 0;
+  int selected2 = 0;
+  int selected3 = 1;
+  int selected4 = Get.isDarkMode ? 1 : 0;
+
+  void _loadSelectors() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selected1 = prefs.getInt('selected1')!;
+      selected2 = prefs.getInt('selected2')!;
+      selected3 = prefs.getInt('selected3')!;
+      selected4 = prefs.getInt('selected4')!;
+    });
+  }
+
+  void _saveSelectors() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('selected1', selected1);
+    await prefs.setInt('selected2', selected2);
+    await prefs.setInt('selected3', selected3);
+    await prefs.setInt('selected4', selected4);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectors();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _saveSelectors();
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: SafeArea(
-      child: Container(
-          child: Column(children: [
+        body: SafeArea(
+          child: Container(
+            color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
+              child: Column(children: [
             Row(
               children: [
                 IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () {Navigator.pop(context);},
                     icon: Icon(Icons.arrow_back_ios_new),
                     iconSize: 28),
                 SizedBox(
@@ -35,8 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 Text('Настройки',
                     style: GoogleFonts.didactGothic(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600))
+                        fontSize: 30, fontWeight: FontWeight.w600))
               ],
             ),
             Row(
@@ -44,47 +76,53 @@ class _SettingsPageState extends State<SettingsPage> {
                 const Padding(padding: EdgeInsets.only(top: 42, left: 20)),
                 Text('Единицы измерения',
                     style: GoogleFonts.manrope(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600)),
+                        fontSize: 15, fontWeight: FontWeight.w600)),
               ],
             ),
             Container(
               width: 360,
               child: Neumorphic(
+                style: NeumorphicStyle(
+                  color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
+                  depth: 3,
+                  lightSource: LightSource.top,
+                  boxShape: NeumorphicBoxShape.roundRect(
+                      BorderRadius.all(Radius.circular(30))),
+                ),
                 child: Column(
                   children: [
                     Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 13, left: 20, right: 20),
+                          padding: const EdgeInsets.only(
+                              top: 13, left: 20, right: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Температура',
                                 style: GoogleFonts.manrope(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600),
-
+                                    color: !Get.isDarkMode ? Colors.black : Colors.white,
+                                    fontSize: 20, fontWeight: FontWeight.w600),
                               ),
                               SizedBox(
                                 width: 110,
                                 height: 27,
                                 child: NeumorphicToggle(
-                                  onChanged: (val){
+                                  onChanged: (val) {
                                     setState(() {
-                                      SettingsPage.selected1 = val;
+                                      selected1 = val;
                                     });
                                   },
-                                  selectedIndex: SettingsPage.selected1,
-                                  thumb: Container(
-                                  ),
+                                  selectedIndex: selected1,
+                                  thumb: Container(),
                                   children: [
                                     ToggleElement(
                                       background: Center(
                                         child: Text(
                                           '°C',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -93,6 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           '°С',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -103,6 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           '°F',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -111,6 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           '°F',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -118,7 +159,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     ),
                                   ],
                                   style: NeumorphicToggleStyle(
-                                    backgroundColor: Colors.transparent,
+                                    backgroundColor: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
                                     lightSource: LightSource.bottom,
                                   ),
                                 ),
@@ -127,42 +168,43 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 13, left: 20, right: 20),
+                          padding: const EdgeInsets.only(
+                              top: 13, left: 20, right: 20),
                           child: Divider(
                             height: 1,
                             thickness: 1,
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 13, left: 20, right: 20),
+                          padding: const EdgeInsets.only(
+                              top: 13, left: 20, right: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Сила ветра',
                                 style: GoogleFonts.manrope(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600),
-
+                                    color: !Get.isDarkMode ? Colors.black : Colors.white,
+                                    fontSize: 20, fontWeight: FontWeight.w600),
                               ),
                               Container(
                                 width: 110,
                                 height: 27,
                                 child: NeumorphicToggle(
-                                  onChanged: (val){
+                                  onChanged: (val) {
                                     setState(() {
-                                      SettingsPage.selected2 = val;
+                                      selected2 = val;
                                     });
                                   },
-                                  selectedIndex: SettingsPage.selected2,
-                                  thumb: Container(
-                                  ),
+                                  selectedIndex: selected2,
+                                  thumb: Container(),
                                   children: [
                                     ToggleElement(
                                       background: Center(
                                         child: Text(
                                           'м/с',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -171,6 +213,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           'м/с',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -181,6 +224,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           'км/ч',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -189,6 +233,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           'км/ч',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -205,61 +250,64 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 13, left: 20, right: 20),
+                          padding: const EdgeInsets.only(
+                              top: 13, left: 20, right: 20),
                           child: Divider(
                             height: 1,
                             thickness: 1,
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 13, left: 20, right: 20),
+                          padding: const EdgeInsets.only(
+                              top: 13, left: 20, right: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Давление',
                                 style: GoogleFonts.manrope(
-                                    color: Color(0xFF333333),
+                                    color: !Get.isDarkMode ? Colors.black : Colors.white,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600),
-
                               ),
                               Container(
                                 width: 170,
                                 height: 27,
                                 child: NeumorphicToggle(
-                                  onChanged: (val){
+                                  onChanged: (val) {
                                     setState(() {
-                                      SettingsPage.selected3 = val;
+                                      selected3 = val;
                                     });
                                   },
-                                  selectedIndex: SettingsPage.selected3,
-                                  thumb: Container(
-                                  ),
+                                  selectedIndex: selected3,
+                                  thumb: Container(),
                                   children: [
                                     ToggleElement(
-                                      background: const Center(
+                                      background: Center(
                                         child: Text(
                                           'мм.рт.ст',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
                                       ),
-                                      foreground: const Center(
+                                      foreground: Center(
                                         child: Text(
                                           'мм.рт.ст',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
                                           ),
                                         ),
                                       ),
                                     ),
                                     ToggleElement(
-                                      background: const Center(
+                                      background: Center(
                                         child: Text(
                                           'гПа',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -268,6 +316,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           'гПа',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -284,61 +333,67 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 13, left: 20, right: 20),
+                          padding: const EdgeInsets.only(
+                              top: 13, left: 20, right: 20),
                           child: Divider(
                             height: 1,
                             thickness: 1,
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 13, left: 20, right: 20, bottom: 13),
+                          padding: const EdgeInsets.only(
+                              top: 13, left: 20, right: 20, bottom: 13),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Тема',
                                 style: GoogleFonts.manrope(
-                                    color: Color(0xFF333333),
+                                    color: !Get.isDarkMode ? Colors.black : Colors.white,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600),
-
                               ),
                               Container(
                                 width: 170,
                                 height: 27,
                                 child: NeumorphicToggle(
-                                  onChanged: (val){
+                                  onChanged: (val) {
                                     setState(() {
-                                      SettingsPage.selected4 = val;
+                                      Get.changeTheme(val != 0
+                                          ? NordTheme.light()
+                                          : NordTheme.dark());
+                                      selected4 = val;
                                     });
                                   },
-                                  selectedIndex: SettingsPage.selected4,
-                                  thumb: Container(
-                                  ),
+                                  selectedIndex: selected4,
+                                  thumb: Container(),
                                   children: [
                                     ToggleElement(
-                                      background: const Center(
+                                      background: Center(
                                         child: Text(
                                           'Темная',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
                                       ),
-                                      foreground: const Center(
+                                      foreground: Center(
                                         child: Text(
                                           'Темная',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
                                       ),
                                     ),
                                     ToggleElement(
-                                      background: const Center(
+                                      background: Center(
                                         child: Text(
                                           'Светлая',
                                           style: TextStyle(
+                                            color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -347,6 +402,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         child: Text(
                                           'Светлая',
                                           style: TextStyle(
+                                            color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
                                           ),
                                         ),
@@ -364,18 +420,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ],
                     ),
-
                   ],
-                ),
-                style: NeumorphicStyle(
-                  depth: 3,
-                  lightSource: LightSource.top,
-                  boxShape: NeumorphicBoxShape.roundRect(
-                      BorderRadius.all(Radius.circular(30))),
                 ),
               ),
             ),
           ])),
-    ),
-  );
+        ),
+      );
 }

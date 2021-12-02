@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -17,7 +18,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
       child: Container(
-        color: Color(0xFFE2EBFF),
+        color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
         child: Column(
           children: [
             Row(
@@ -28,14 +29,14 @@ class _DeveloperPageState extends State<DeveloperPage> {
                     },
                     icon: Icon(Icons.arrow_back_ios_outlined),
                     iconSize: 20,
-                    color: Colors.black),
+                    color: !Get.isDarkMode ? Colors.black : Colors.white),
                 SizedBox(
                   width: 18,
                 ),
                 Text('О разработчике',
                     style: GoogleFonts.manrope(
                         fontSize: 20,
-                        color: Colors.black,
+                        color: !Get.isDarkMode ? Colors.black : Colors.white,
                         fontWeight: FontWeight.w600))
               ],
             ),
@@ -48,8 +49,8 @@ class _DeveloperPageState extends State<DeveloperPage> {
                     child: Center(
                       child: Neumorphic(
                         style: NeumorphicStyle(
-                            color: Color(0xFFDEE9FF),
-                            depth: -15,
+                            color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
+                            depth: 2,
                             boxShape: NeumorphicBoxShape.roundRect(
                                 BorderRadius.all(Radius.circular(15)))),
                         child: Padding(
@@ -59,7 +60,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
                           ),
                           child: Text('Weather app',
                               style: GoogleFonts.manrope(
-                                  color: Color(0xFF000000),
+                                  color: !Get.isDarkMode ? Colors.black : Colors.white,
                                   fontSize: 25,
                                   fontWeight: FontWeight.w800)),
                         ),
@@ -73,11 +74,11 @@ class _DeveloperPageState extends State<DeveloperPage> {
                       child: Neumorphic(
                         padding: EdgeInsets.only(top: 23),
                         style: NeumorphicStyle(
-                            color: Color(0xFFE2EBFF),
+                            color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
                             depth: 5,
                             lightSource: LightSource.bottom,
                             boxShape: NeumorphicBoxShape.roundRect(
-                                BorderRadius.all(Radius.circular(28)))),
+                                const BorderRadius.only(topLeft:Radius.circular(28), topRight: Radius.circular(28)))),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +88,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
                                 Text(
                                   'by ITMO University',
                                   style: GoogleFonts.manrope(
-                                      color: Colors.black,
+                                      color: !Get.isDarkMode ? Colors.black : Colors.white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w800),
 
@@ -96,7 +97,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
                                 Text(
                                   'Версия 1.0',
                                   style: GoogleFonts.manrope(
-                                      color: Color(0xFF4A4A4A),
+                                      color: !Get.isDarkMode ? Colors.black : Colors.white,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w800),
                                 ),
@@ -104,7 +105,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
                                 Text(
                                   'от 30 сентября 2021',
                                   style: GoogleFonts.manrope(
-                                      color: Color(0xFF4A4A4A),
+                                      color: !Get.isDarkMode ? Colors.black : Colors.white,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w800),
                                 ),
@@ -116,7 +117,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
                                 children: [
                                   Text('2021',
                                       style: GoogleFonts.manrope(
-                                          color: Colors.black,
+                                          color: !Get.isDarkMode ? Colors.black : Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w900)),
                                 ],

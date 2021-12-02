@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class Weather with ChangeNotifier {
   var temp;
+  var tempF;
   var tempMax;
   var tempMin;
   var lat;
@@ -16,6 +17,7 @@ class Weather with ChangeNotifier {
 
   Weather({
     this.temp,
+    this.tempF,
     this.tempMax,
     this.tempMin,
     this.lat,
@@ -32,6 +34,7 @@ class Weather with ChangeNotifier {
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
       temp: json['main']['temp'],
+      tempF: json['main']['temp']*9/5+32,
       tempMax: json['main']['temp_max'],
       tempMin: json['main']['temp_min'],
       lat: json['coord']['lat'],

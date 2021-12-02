@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_icons/flutter_weather_icons.dart';
+import 'package:get/get.dart';
 
 class WeatherDetail extends StatelessWidget {
   final wData;
@@ -10,7 +11,7 @@ class WeatherDetail extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
+        color: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.25),
@@ -41,6 +42,7 @@ class WeatherDetail extends StatelessWidget {
                   header,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
+                    color: !Get.isDarkMode ? Colors.black : Colors.white,
                     fontSize: 18,
                   ),
                 ),
@@ -48,7 +50,7 @@ class WeatherDetail extends StatelessWidget {
               FittedBox(
                 child: Text(
                   body,
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15),
+                  style: TextStyle(fontWeight: FontWeight.w400, color: !Get.isDarkMode ? Colors.black : Colors.white, fontSize: 15),
                 ),
               ),
             ],
