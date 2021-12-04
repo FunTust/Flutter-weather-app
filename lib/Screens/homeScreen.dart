@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_nord_theme/flutter_nord_theme.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:untitled/Screens/settings.dart';
-import 'package:untitled/widgets/bar.dart';
-import 'package:untitled/widgets/sevenDayForecast.dart';
-
+import 'package:untitled/Screens/DailyWeatherScreen.dart';
+import 'package:untitled/models/dailyWeather.dart';
+import 'package:untitled/widgets/sevenDayWidget.dart';
+import '../Screens/settings.dart';
+import '../widgets/bar.dart';
+import '../widgets/sevenDayForecast.dart';
 import '../provider/weatherProvider.dart';
 import '../widgets/hourlyForecast.dart';
 import '../widgets/mainWeather.dart';
@@ -31,6 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // Get.changeTheme(selected4 == 0
+    //     ? NordTheme.dark()
+    //     : NordTheme.light());
     _getData();
     SetImage(Get.isDarkMode);
   }
@@ -101,7 +107,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Bar(),
                         weatherData.isRequestError
-                            ? RequestError()
+                            ? Expanded(
+                                child: PageView(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    width: mediaQuery.size.width,
+                                    child: RefreshIndicator(
+                                      onRefresh: () async {
+                                        _refreshData(context);
+                                      },
+                                      child: ListView(
+                                        children: [
+                                          RequestError(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
                             : Expanded(
                                 child: PageView(
                                   controller: _pageController,
@@ -113,7 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         onRefresh: () async {
                                           _refreshData(context);
                                         },
-                                        backgroundColor: Colors.blue,
                                         child: ListView(
                                           children: [
                                             MainWeather(wData: weatherData),
@@ -121,58 +144,52 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                     ),
-                                    Container(
-                                      height: mediaQuery.size.height,
-                                      width: mediaQuery.size.width,
-                                      child: ListView(
-                                        children: [
-                                          SevenDayForecast(
-                                            wData: weatherData,
-                                            dWeather:
-                                                weatherData.sevenDayWeather,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
-                        SlidingUpPanel(
-                          color: !Get.isDarkMode
-                              ? Color(0xECEFF4FF)
-                              : Color(0xFF071427),
-                          minHeight: 170,
-                          maxHeight: 425,
-                          panel: Column(
-                            children: [
-                              const Padding(padding: EdgeInsets.only(top: 15)),
-                              Container(
-                                height: 5,
-                                width: 60,
-                                decoration: const BoxDecoration(
-                                    color: Colors.blueAccent,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
+                        weatherData.isRequestError
+                            ? Container()
+                            : SlidingUpPanel(
+                                color: !Get.isDarkMode
+                                    ? Color(0xECEFF4FF)
+                                    : Color(0xFF071427),
+                                minHeight: 170,
+                                maxHeight: 425,
+                                panel: Column(
+                                  children: [
+                                    const Padding(
+                                        padding: EdgeInsets.only(top: 15)),
+                                    Container(
+                                      height: 5,
+                                      width: 60,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.blueAccent,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30))),
+                                    ),
+                                    Column(
+                                      children: [
+                                        const Padding(
+                                            padding: EdgeInsets.only(top: 15)),
+                                        HourlyForecast(
+                                            weatherData.hourlyWeather),
+                                        // WeatherInfo(
+                                        //     wData: weatherData
+                                        //         .currentWeather),
+                                        const Padding(
+                                            padding: EdgeInsets.only(top: 15)),
+                                        WeatherDetail(
+                                          wData: weatherData,
+                                          title: 'title',
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30)),
                               ),
-                              Column(
-                                children: [
-                                  const Padding(
-                                      padding: EdgeInsets.only(top: 15)),
-                                  HourlyForecast(weatherData.hourlyWeather),
-                                  // WeatherInfo(
-                                  //     wData: weatherData
-                                  //         .currentWeather),
-                                  const Padding(
-                                      padding: EdgeInsets.only(top: 15)),
-                                  WeatherDetail(wData: weatherData),
-                                ],
-                              )
-                            ],
-                          ),
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30)),
-                        ),
                       ],
                     ),
         ),
@@ -181,74 +198,95 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   weatherDrawer() {
-    return Container(
-      width: 223,
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
-        ),
-        child: Drawer(
-          child: ListView(
-            children: [
-              ListTile(
-                title: Row(
-                  children: [
-                    Text('Weather app',
-                        style: GoogleFonts.dancingScript(
-                            fontSize: 35, fontWeight: FontWeight.w800)),
-                  ],
-                ),
+    return _isLoading
+        ? Container()
+        : Container(
+            width: 223,
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                canvasColor:
+                    !Get.isDarkMode ? Color(0xECEFF4FF) : Color(0xFF071427),
               ),
-              ListTile(
-                title: Row(
+              child: Drawer(
+                child: ListView(
                   children: [
-                    const Icon(Icons.settings),
-                    const SizedBox(
-                      width: 18,
+                    ListTile(
+                      title: Row(
+                        children: [
+                          Text('Weather app',
+                              style: GoogleFonts.dancingScript(
+                                  fontSize: 35, fontWeight: FontWeight.w800)),
+                        ],
+                      ),
                     ),
-                    Text('Настройки',
-                        style: GoogleFonts.didactGothic(fontSize: 23)),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => SettingsPage(title: 'title')));
-                },
-              ),
-              ListTile(
-                title: Row(children: [
-                  const Icon(Icons.favorite_border),
-                  const SizedBox(
-                    width: 18,
-                  ),
-                  Text('Избранное',
-                      style: GoogleFonts.didactGothic(fontSize: 23)),
-                ]),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => FavoritesPage(title: 'title')));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    const Icon(Icons.account_circle_outlined),
-                    const SizedBox(
-                      width: 18,
+                    ListTile(
+                      title: Row(
+                        children: [
+                          const Icon(Icons.settings),
+                          const SizedBox(
+                            width: 18,
+                          ),
+                          Text('Настройки',
+                              style: GoogleFonts.didactGothic(fontSize: 23)),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => SettingsPage(title: 'title')));
+                      },
                     ),
-                    Text('О приложении',
-                        style: GoogleFonts.didactGothic(fontSize: 23)),
+                    ListTile(
+                      title: Row(children: [
+                        const Icon(Icons.favorite_border),
+                        const SizedBox(
+                          width: 18,
+                        ),
+                        Text('Избранное',
+                            style: GoogleFonts.didactGothic(fontSize: 23)),
+                      ]),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => FavoritesPage(title: 'title')));
+                      },
+                    ),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          const Icon(Icons.account_circle_outlined),
+                          const SizedBox(
+                            width: 18,
+                          ),
+                          Text('О приложении',
+                              style: GoogleFonts.didactGothic(fontSize: 23)),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => DeveloperPage(title: 'title')));
+                      },
+                    ),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          const Icon(Icons.account_circle_outlined),
+                          const SizedBox(
+                            width: 18,
+                          ),
+                          Text('7 дней',
+                              style: GoogleFonts.didactGothic(fontSize: 23)),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => DailyWeatherPage(
+                                  title: 'title',
+                                )));
+                      },
+                    ),
                   ],
                 ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => DeveloperPage(title: 'title')));
-                },
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

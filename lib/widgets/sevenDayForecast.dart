@@ -13,7 +13,7 @@ class SevenDayForecast extends StatelessWidget {
   Widget dailyWidget(dynamic weather, BuildContext context) {
     final dayOfWeek = DateFormat('EEE').format(DateTime.now());
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 7),
+      margin: EdgeInsets.symmetric(horizontal: 1),
       child: Column(
         children: [
           FittedBox(

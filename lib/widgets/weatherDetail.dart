@@ -1,11 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_icons/flutter_weather_icons.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/Screens/homeScreen.dart';
 
-class WeatherDetail extends StatelessWidget {
+class WeatherDetail extends StatefulWidget {
   final wData;
+  var title;
+  WeatherDetail({this.wData, required this.title});
 
-  WeatherDetail({this.wData});
+  @override
+  State<WeatherDetail> createState() => _WeatherDetailState(wData: wData);
+
+}
+
+class _WeatherDetailState extends State<WeatherDetail> {
+  _WeatherDetailState({required this.wData});
+  final wData;
+  int selected1 = 0;
+  int selected2 = 0;
+  int selected3 = 0;
+
+  void _loadSelectors() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selected1 = prefs.getInt('selected1')!;
+      selected2 = prefs.getInt('selected2')!;
+      selected3 = prefs.getInt('selected3')!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectors();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
 
   Widget _gridWeatherBuilder(String header, String body, IconData icon) {
     return Container(
@@ -29,10 +64,10 @@ class WeatherDetail extends StatelessWidget {
             child: Icon(
               icon,
               color: Colors.blue,
-              size: 35,
+              size: 30,
             ),
           ),
-          SizedBox(width: 15),
+          SizedBox(width: 5),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -76,14 +111,20 @@ class WeatherDetail extends StatelessWidget {
             ),
             children: [
               _gridWeatherBuilder(
-                  '${wData.weather.feelsLike.toStringAsFixed(1)}°C',
+                  selected1 == 0
+                      ? '${wData.weather.temp} °C'
+                      : '${wData.weather.tempF.toStringAsFixed(1)} °F',
                   'Feels Like',
                   WeatherIcons.wiCelsius),
               _gridWeatherBuilder('${wData.weather.humidity}%', 'Humidity',
                   WeatherIcons.wiRaindrop),
-              _gridWeatherBuilder('${wData.weather.windSpeed} km/h', 'Wind',
+              _gridWeatherBuilder(selected2 != 0
+                  ? '${wData.weather.windSpeed} km/h'
+                  : '${(wData.weather.windSpeed/3.6).toStringAsFixed(2)} М/с', 'Wind',
                   WeatherIcons.wiStrongWind),
-              _gridWeatherBuilder('${wData.weather.pressure} hPa', 'Pressure',
+              _gridWeatherBuilder(selected3 == 1
+                  ? '${wData.weather.pressure} гПа'
+                  : '${(wData.weather.pressure*0.750062).toStringAsFixed(0)} мм.рт.ст', 'Pressure',
                   WeatherIcons.wiBarometer),
             ],
           ),

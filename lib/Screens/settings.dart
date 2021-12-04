@@ -18,7 +18,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   int selected1 = 0;
   int selected2 = 0;
-  int selected3 = 1;
+  int selected3 = 0;
   int selected4 = Get.isDarkMode ? 1 : 0;
 
   void _loadSelectors() async {
@@ -27,7 +27,6 @@ class _SettingsPageState extends State<SettingsPage> {
       selected1 = prefs.getInt('selected1')!;
       selected2 = prefs.getInt('selected2')!;
       selected3 = prefs.getInt('selected3')!;
-      selected4 = prefs.getInt('selected4')!;
     });
   }
 
@@ -37,18 +36,21 @@ class _SettingsPageState extends State<SettingsPage> {
     await prefs.setInt('selected2', selected2);
     await prefs.setInt('selected3', selected3);
     await prefs.setInt('selected4', selected4);
+    Get.offAll(()=>HomeScreen());
   }
 
   @override
   void initState() {
     super.initState();
     _loadSelectors();
+    selected4 = Get.isDarkMode ? 0 : 1;
   }
 
   @override
   void dispose() {
     super.dispose();
     _saveSelectors();
+    Navigator.pop(context);
   }
 
   @override
@@ -202,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     ToggleElement(
                                       background: Center(
                                         child: Text(
-                                          'м/с',
+                                          'М/с',
                                           style: TextStyle(
                                             color: !Get.isDarkMode ? Colors.black : Colors.white,
                                             fontSize: 18,
@@ -211,7 +213,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       ),
                                       foreground: Center(
                                         child: Text(
-                                          'м/с',
+                                          'М/с',
                                           style: TextStyle(
                                             color: Get.isDarkMode ? Colors.black : Colors.black54,
                                             fontSize: 18,
@@ -359,9 +361,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: NeumorphicToggle(
                                   onChanged: (val) {
                                     setState(() {
-                                      Get.changeTheme(val != 0
-                                          ? NordTheme.light()
-                                          : NordTheme.dark());
+                                      Get.changeTheme(val == 0
+                                          ? NordTheme.dark()
+                                          : NordTheme.light());
+                                      print(val);
                                       selected4 = val;
                                     });
                                   },

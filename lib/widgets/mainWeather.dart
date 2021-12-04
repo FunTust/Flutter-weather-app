@@ -10,16 +10,6 @@ class MainWeather extends StatelessWidget {
 
   MainWeather({this.wData});
 
-  final TextStyle _style1 = TextStyle(
-    fontWeight: FontWeight.w700,
-    fontSize: 20,
-  );
-  final TextStyle _style2 = TextStyle(
-    fontWeight: FontWeight.w400,
-    color: Colors.grey[700],
-    fontSize: 16,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,26 +29,16 @@ class MainWeather extends StatelessWidget {
           // ),
           // SizedBox(height: 1),
           Text(
-            DateFormat.yMMMEd("ru").format(DateTime.now()),
-            // style: _style2,
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 25, right: 25),
-                child: MapString.mapStringToIcon(
-                    '${wData.weather.currently}', context, 55),
-              ),
-              Text(
                 '${wData.weather.temp.toStringAsFixed(0)}°C',
                 style: TextStyle(
                   fontSize: 85,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-            ],
+          SizedBox(height: 10),
+          Text(
+            DateFormat.yMMMd("ru").format(DateTime.now()),
+            // style: _style2,
           ),
           // SizedBox(height: 10),
           // Text(

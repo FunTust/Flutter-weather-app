@@ -28,7 +28,7 @@ class WeatherProvider with ChangeNotifier {
         var latitude = locData.latitude;
         var longitude = locData.longitude;
         Uri url = Uri.parse(
-            'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&units=metric&lang=ru&appid=$apiKey');
+            'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&lang=ru&units=metric&appid=$apiKey');
         Uri dailyUrl = Uri.parse(
             'https://api.openweathermap.org/data/2.5/onecall?lat=$latitude&lon=$longitude&units=metric&exclude=minutely,current&lang=ru&appid=$apiKey');
         try {
