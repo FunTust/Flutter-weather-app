@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../helper/utils.dart';
-import '../Screens/hourlyWeatherScreen.dart';
+import '../Screens/hourly_weather_screen.dart';
 import '../models/dailyWeather.dart';
 
 class HourlyForecast extends StatelessWidget {

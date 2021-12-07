@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_icons/flutter_weather_icons.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/Screens/homeScreen.dart';
+import 'package:untitled/Screens/home_screen.dart';
 
 class WeatherDetail extends StatefulWidget {
   final wData;

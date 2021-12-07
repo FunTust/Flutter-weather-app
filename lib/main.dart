@@ -4,10 +4,10 @@ import 'package:flutter_nord_theme/flutter_nord_theme.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import './Screens/hourlyWeatherScreen.dart';
+import './Screens/hourly_weather_screen.dart';
 import './provider/weatherProvider.dart';
-import './Screens/weeklyWeatherScreen.dart';
-import './Screens/homeScreen.dart';
+import './Screens/weekly_weather_screen.dart';
+import './Screens/home_screen.dart';
 
 void main() async {
   runApp(

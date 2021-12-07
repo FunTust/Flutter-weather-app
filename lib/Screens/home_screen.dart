@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:untitled/Screens/dailyWeatherScreen.dart';
+import 'package:untitled/Screens/daily_weather_screen.dart';
 import '../Screens/settings.dart';
 import '../widgets/bar.dart';
 import '../provider/weatherProvider.dart';
