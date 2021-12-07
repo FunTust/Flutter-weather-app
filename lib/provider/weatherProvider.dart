@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../models/weather.dart';
 import '../models/dailyWeather.dart';
 
 class WeatherProvider with ChangeNotifier {
+  List<String> Cities = [];
   String apiKey = '856822fd8e22db5e1ba48c0e7d69844a';
   Weather weather = Weather();
   DailyWeather currentWeather = DailyWeather();
@@ -50,12 +52,11 @@ class WeatherProvider with ChangeNotifier {
           List<DailyWeather> tempSevenDay = [];
           List items = dailyData['daily'];
           List itemsHourly = dailyData['hourly'];
-          tempHourly = itemsHourly
+          itemsHourly
               .map((item) => DailyWeather.fromHourlyJson(item))
               .toList()
-              .skip(1)
-              .take(4)
-              .toList();
+              .forEach((e) {if(e.date.hour==6||e.date.hour==12||e.date.hour==18||e.date.hour==0) tempHourly.add(e); });
+          tempHourly = tempHourly.skip(1).take(4).toList();
           temp24Hour = itemsHourly
               .map((item) => DailyWeather.fromHourlyJson(item))
               .toList()
@@ -91,6 +92,8 @@ class WeatherProvider with ChangeNotifier {
     loading = true;
     isRequestError = false;
     isLocationError = false;
+    final prefs = await SharedPreferences.getInstance();
+    if(prefs.getStringList("cities")!=null){Cities = prefs.getStringList("cities")!;print(Cities);}
     Uri url = Uri.parse(
         'https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&lang=ru&appid=$apiKey');
     try {
@@ -109,7 +112,10 @@ class WeatherProvider with ChangeNotifier {
     Uri dailyUrl = Uri.parse(
         'https://api.openweathermap.org/data/2.5/onecall?lat=${weather.lat}&lon=$longitude&units=metric&exclude=minutely,current&lang=ru&appid=$apiKey');
     try {
+      print(weather.cityName);
+      Cities.add(weather.cityName);
       final response = await http.get(dailyUrl);
+      await prefs.setStringList('cities', Cities.toSet().toList());
       final dailyData = json.decode(response.body) as Map<String, dynamic>;
       print(dailyUrl);
       currentWeather = DailyWeather.fromJson(dailyData);

@@ -76,41 +76,11 @@ class HourlyForecast extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15),
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 5),
-              //   child: Text(
-              //     'Next 4 Hours',
-              //     style: TextStyle(
-              //       fontSize: 17,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // TextButton(
-              //   child: Text(
-              //     'See More',
-              //     style: TextStyle(color: Colors.blue),
-              //   ),
-              //   onPressed: () {
-              //     Navigator.of(context).pushNamed(HourlyScreen.routeName);
-              //   },
-              // ),
-            ],
-          ),
-          SizedBox(height: 5),
-          Row(
+      child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: hourlyForecast
                   .map((item) => hourlyWidget(item, context))
                   .toList()),
-        ],
-      ),
     );
   }
 }

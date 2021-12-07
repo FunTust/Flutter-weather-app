@@ -186,6 +186,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  listview_utils:
+    dependency: "direct main"
+    description:
+      name: listview_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-nullsafety"
   location:
     dependency: "direct main"
     description:
@@ -269,7 +276,7 @@ packages:
       name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.4"
   path_provider_platform_interface:
     dependency: transitive
     description:

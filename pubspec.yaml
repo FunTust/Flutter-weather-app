@@ -51,6 +51,7 @@ dependencies:
   simple_animations: ^4.0.1
   get: ^4.5.1
   shared_preferences: ^2.0.9
+  listview_utils: ^1.0.0-nullsafety
 
 dev_dependencies:
   flutter_test:

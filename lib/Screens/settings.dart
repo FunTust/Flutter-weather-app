@@ -50,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void dispose() {
     super.dispose();
     _saveSelectors();
-    Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   @override
